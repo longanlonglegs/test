@@ -5,7 +5,7 @@ description = ""
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [
-    { name = "Flet developer", email = "you@example.com" }
+    { name = "logan duran", email = "h2210102@nushigh.edu.sg" }
 ]
 dependencies = [
   "flet==0.27.4"
@@ -14,14 +14,14 @@ dependencies = [
 [tool.flet]
 # org name in reverse domain name notation, e.g. "com.mycompany".
 # Combined with project.name to build bundle ID for iOS and Android apps
-org = "com.mycompany"
+org = "com.uplink"
 
 # project display name that is used as an app title on Android and iOS home screens,
 # shown in window titles and about app dialogs on desktop.
 product = "uplink"
 
 # company name to display in about app dialogs
-company = "Flet"
+company = "logan&mithil"
 
 # copyright text to display in about app dialogs
 copyright = "Copyright (C) 2025 by Flet"

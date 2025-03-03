@@ -317,7 +317,7 @@ async def main(page: ft.Page):
                     print("Listening...")
                     # Capture audio from the microphone within the 'with' statement
                     audio = recognizer.listen(source)
-
+ 
                     print("Recognizing...")
                     # Recognize speech using PocketSphinx in a separate thread
                     text = await asyncio.to_thread(recognizer.recognize_sphinx, audio)
