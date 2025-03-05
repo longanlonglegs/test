@@ -83,7 +83,7 @@ async def main(page: ft.Page):
                 controls=[
                     ft.Row(
                         [
-                            ft.ElevatedButton(content=ft.Text("ASLTT", weight=ft.FontWeight.BOLD, size=80), on_click=goASLTT, width=350, height=200, bgcolor="blue"),       
+                            ft.ElevatedButton(content=ft.Text("ASLTS", weight=ft.FontWeight.BOLD, size=80), on_click=goASLTT, width=350, height=200, bgcolor="blue"),       
                     ],
                     expand=1,
                     alignment=ft.MainAxisAlignment.CENTER,
