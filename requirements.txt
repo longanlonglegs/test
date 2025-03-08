@@ -1,0 +1,8 @@
+pocketsphinx
+opencv-python
+pyaudio
+mediapipe
+numpy
+gTTS
+flet
+SpeechRecognition
