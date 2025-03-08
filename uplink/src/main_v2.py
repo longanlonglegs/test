@@ -28,16 +28,6 @@ async def main(page: ft.Page):
     async def add_tts(e):
         await a(e)
 
-    # Generate the audio in memory
-    myobj = gTTS(text="nothing", lang=language, slow=False)
-    myobj.save(r"test/uplink/src/assets/convertedspeech.mp3")
-
-    print("test")
-
-    audio1 = ft.Audio(
-        src = "convertedspeech.mp3"
-    )
-
     async def a(e):
         # Generate the audio in memory
         myobj = gTTS(text=e.control.value, lang=language, slow=False)
@@ -54,22 +44,25 @@ async def main(page: ft.Page):
         audio1.update()
         audio1.play()
 
-    def a_final(e = ""):
-
+    async def a_final(e):
         # Generate the audio in memory
         myobj = gTTS(text=e, lang=language, slow=False)
-        myobj.save(r"test/uplink/src/assets/convertedspeech.mp3")
+        audio_bytes = io.BytesIO()
+        myobj.write_to_fp(audio_bytes)
+        audio_bytes.seek(0)  # Reset the stream position to the beginning
 
-        print(e)
+        # Convert the audio to a base64-encoded string
+        audio_base64 = base64.b64encode(audio_bytes.read()).decode("utf-8")
 
         # Update the audio source and play
-        audio1.src = "convertedspeech.mp3"
+        audio1.src = None
+        audio1.src_base64 = audio_base64
         audio1.update()
-      
         audio1.play()
 
-        print(f"Generated audio for text: {e}")
-
+    audio1 = ft.Audio(
+        src="https://luan.xyz/files/audio/ambient_c_motion.mp3"
+    )
 
     def goASLTT(e):
         page.go("/ASLTT")
@@ -166,7 +159,7 @@ async def main(page: ft.Page):
         await stop()
 
     async def play():
-       ''' # Set up the video capture (using webcam in this case)
+        # Set up the video capture (using webcam in this case)
         global cap, recognizer
 
         cap = cv2.VideoCapture(0)  # 0 for the default webcam
@@ -182,8 +175,7 @@ async def main(page: ft.Page):
         # Create a GestureRecognizer object
         recognizer = vision.GestureRecognizer.create_from_model_path(model_path)
 
-        await display_img(True)'''
-       await a_final("test")
+        await display_img(True)
 
     async def process_frame(frame):
 
@@ -206,7 +198,7 @@ async def main(page: ft.Page):
             print(gesture_text)
             cv2.putText(frame, gesture_text, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
             print(top_gesture.category_name)
-            await a_final(gesture_text)
+            await a_final(top_gesture.category_name)
         else:
             cv2.putText(frame, "No gesture recognized", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
@@ -282,7 +274,7 @@ async def main(page: ft.Page):
 
     img_view = ft.Image(height=220)
 
-    start_button = ft.ElevatedButton(text="Start", expand=True, on_click= lambda e: a_final("jesus"))
+    start_button = ft.ElevatedButton(text="Start", expand=True, on_click=button_play)
 
     stop_button = ft.ElevatedButton(text="End", expand=True, on_click=button_stop)
 
