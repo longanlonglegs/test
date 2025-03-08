@@ -166,7 +166,6 @@ async def main(page: ft.Page):
         await stop()
 
     async def play():
-       ''' # Set up the video capture (using webcam in this case)
         global cap, recognizer
 
         cap = cv2.VideoCapture(0)  # 0 for the default webcam
@@ -175,20 +174,16 @@ async def main(page: ft.Page):
             exit()
 
         # Check if the model exists
-        model_path = os.path.join(os.path.dirname(__file__), 'als.task')
+        model_path = os.path.join(os.path.dirname(__file__), 'asl.task')
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Model file not found at {model_path}")
 
         # Create a GestureRecognizer object
         recognizer = vision.GestureRecognizer.create_from_model_path(model_path)
 
-        await display_img(True)'''
-       await a_final("test")
-
+        await display_img(True)
+       
     async def process_frame(frame):
-
-        global recognizer
-
         """
         Process each frame for gesture recognition.
         """
@@ -282,7 +277,7 @@ async def main(page: ft.Page):
 
     img_view = ft.Image(height=220)
 
-    start_button = ft.ElevatedButton(text="Start", expand=True, on_click= lambda e: a_final("jesus"))
+    start_button = ft.ElevatedButton(text="Start", expand=True, on_click= button_play)
 
     stop_button = ft.ElevatedButton(text="End", expand=True, on_click=button_stop)
 
