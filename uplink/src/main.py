@@ -35,7 +35,7 @@ async def main(page: ft.Page):
     data = io.BytesIO()
 
     # create a gTTS object
-    gtts = gTTS(text="", lang="en", slow=False)
+    gtts = gTTS(text="test", lang="en", slow=False)
 
     gtts.write_to_fp(data)
 
