@@ -35,7 +35,7 @@ async def main(page: ft.Page):
     data = io.BytesIO()
 
     # create a gTTS object
-    gtts = gTTS(text="nothing", lang="en", slow=False)
+    gtts = gTTS(text="", lang="en", slow=False)
 
     gtts.write_to_fp(data)
 
@@ -62,12 +62,13 @@ async def main(page: ft.Page):
 
         speech = base64.b64encode(data.read()).decode('utf-8')
 
-        transcribedSpeechPlayer.src_base64 = speech
+        if speech == transcribedSpeechPlayer.src_base64:  transcribedSpeechPlayer.play()
+        else: 
+            transcribedSpeechPlayer.src_base64 = speech
+            transcribedSpeechPlayer.update()
+            transcribedSpeechPlayer.play()
 
-        transcribedSpeechPlayer.update()
-        transcribedSpeechPlayer.play()
-
-        await asyncio.sleep(3)
+        await asyncio.sleep(2)
 
         print(f"Generated audio for text: {asl}")
 
@@ -201,8 +202,6 @@ async def main(page: ft.Page):
 
     asltsText = ft.Text("Generated text will be displayed here", expand=True)
 
-    err_log = ft.Text("Error messages will be displayed here", expand=True, color="blue")
-
     button_row = ft.Row(alignment=ft.MainAxisAlignment.SPACE_EVENLY, expand=True, controls=[asltsStartButton, asltsStopButton])
     
     main_col = ft.Column(
@@ -213,48 +212,36 @@ async def main(page: ft.Page):
                    alignment=ft.MainAxisAlignment.CENTER), 
                    asltsText, 
                    button_row, 
-                   err_log, 
                    ])
 
     safe_space = ft.SafeArea(main_col)  # Define safe_space before it is used
 
+    # this is called from the background thread
+    def callback(recognizer, audio):
+        try:
+            STTPrint("pocketsphinx thinks you said " + recognizer.recognize_sphinx(audio))
+        except sr.UnknownValueError:
+            STTPrint("pocketsphinx could not understand audio")
+        except Exception as e:
+            STTPrint(f"An error occurred: {e}")
+        
 
     async def initializeSTT(e):
-        global STTstate
-        STTstate = True
         await startSTT()
 
     async def releaseSTT(e):
-        global STTstate
-        STTstate = False
+        listener(wait_for_stop=False)
+        STTPrint("stopped listening")
     
     async def startSTT():
+
+        global STTstate, sttRecognizer, listener
+
         with mic as source:
             STTPrint("Adjusting for ambient noise... Please wait.")
             sttRecognizer.adjust_for_ambient_noise(source)
 
-            while STTstate:
-                try:
-                    STTPrint("Listening...")
-                    print("Listening...")
-
-                    # Capture audio from the microphone within the 'with' statement
-                    audio = sttRecognizer.listen(source)
-
-                    print("Recognizing...")
-
-                    # Recognize speech using PocketSphinx in a separate thread
-                    text = await asyncio.to_thread(sttRecognizer.recognize_sphinx, audio)
-                    STTPrint(f"{text}")
-
-                except sr.UnknownValueError:
-                    STTPrint("Sorry, I couldn't understand the audio.")
-                except sr.RequestError as e:
-                    STTPrint(f"Error with the PocketSphinx service: {e}")
-                except Exception as e:
-                    STTPrint(f"An error occurred: {e}")
-
-            STTPrint("stt has been stopped")
+        listener = sttRecognizer.listen_in_background(source, callback)
         
     
     sttStartButton = ft.ElevatedButton(text="Start", expand=True, on_click=initializeSTT)
@@ -263,11 +250,9 @@ async def main(page: ft.Page):
 
     sttText = ft.Text("Generated text will be displayed here", expand=True)
 
-    STTerr_log = ft.Text("Error messages will be displayed here", expand=True, color="blue")
-
     STTbutton_row = ft.Row(alignment=ft.MainAxisAlignment.SPACE_EVENLY, expand=True, controls=[sttStartButton, sttStopButton])
     STTmain_col = ft.Column(alignment=ft.MainAxisAlignment.START, expand=True, 
-                        controls=[sttText, STTbutton_row, STTerr_log])
+                        controls=[sttText, STTbutton_row])
 
     STTsafe_space = ft.SafeArea(STTmain_col)
 
