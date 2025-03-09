@@ -193,13 +193,13 @@ async def main(page: ft.Page):
         sttText.value = text
         sttText.update()
 
-    img_view = ft.Image(height=220)
+    img_view = ft.Image(height=400)
 
-    asltsStartButton = ft.ElevatedButton(text="Start", expand=True, on_click= initializeASLTS)
+    asltsStartButton = ft.ElevatedButton(content=ft.Text(value="Start", size=40), expand=True, on_click= initializeASLTS, height=80)
 
-    asltsStopButton = ft.ElevatedButton(text="End", expand=True, on_click= releaseASLTS)
+    asltsStopButton = ft.ElevatedButton(content=ft.Text(value="End", size=40), expand=True, on_click= releaseASLTS, height=80)
 
-    asltsText = ft.Text("Generated text will be displayed here", expand=True)
+    asltsText = ft.Text("Generated text will be displayed here", expand=True, size=40)
 
     button_row = ft.Row(alignment=ft.MainAxisAlignment.SPACE_EVENLY, expand=True, controls=[asltsStartButton, asltsStopButton])
     
@@ -243,15 +243,15 @@ async def main(page: ft.Page):
         listener = sttRecognizer.listen_in_background(source, callback)
         
     
-    sttStartButton = ft.ElevatedButton(text="Start", expand=True, on_click=initializeSTT)
+    sttStartButton = ft.ElevatedButton(content=ft.Text(value="Start", size=40), expand=True, on_click=initializeSTT, height=80)
 
-    sttStopButton = ft.ElevatedButton(text="End", expand=True, on_click=releaseSTT)
+    sttStopButton = ft.ElevatedButton(content=ft.Text(value="End", size=40), expand=True, on_click=releaseSTT, height=80)
 
-    sttText = ft.Text("Generated text will be displayed here", expand=True)
+    sttText = ft.Text("Generated text will be displayed here", expand=True, size=40)
 
     STTbutton_row = ft.Row(alignment=ft.MainAxisAlignment.SPACE_EVENLY, expand=True, controls=[sttStartButton, sttStopButton])
     STTmain_col = ft.Column(alignment=ft.MainAxisAlignment.START, expand=True, 
-                        controls=[sttText, STTbutton_row])
+                        controls=[sttText, STTbutton_row], spacing=40)
 
     STTsafe_space = ft.SafeArea(STTmain_col)
 
