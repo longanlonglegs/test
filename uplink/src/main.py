@@ -62,13 +62,12 @@ async def main(page: ft.Page):
 
         speech = base64.b64encode(data.read()).decode('utf-8')
 
-        if speech == transcribedSpeechPlayer.src_base64:  transcribedSpeechPlayer.play()
-        else: 
-            transcribedSpeechPlayer.src_base64 = speech
-            transcribedSpeechPlayer.update()
-            transcribedSpeechPlayer.play()
+        transcribedSpeechPlayer.src_base64 = speech
 
-        await asyncio.sleep(2)
+        transcribedSpeechPlayer.update()
+        transcribedSpeechPlayer.play()
+
+        await asyncio.sleep(3)
 
         print(f"Generated audio for text: {asl}")
 
