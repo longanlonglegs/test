@@ -21,7 +21,7 @@ mic = sr.Microphone()
 audioState = False
 
 # Check if the model exists
-model_path = os.path.join(os.path.dirname(__file__), 'asl.task')
+model_path = os.path.join(os.path.dirname(__file__), 'asl2.task')
 
 # Create a GestureRecognizer object
 asltsRecognizer = vision.GestureRecognizer.create_from_model_path(model_path)
