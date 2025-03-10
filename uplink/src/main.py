@@ -21,7 +21,7 @@ mic = sr.Microphone()
 audioState = False
 
 # Check if the model exists
-model_path = os.path.join(os.path.dirname(__file__), 'asl2.task')
+model_path = os.path.join(os.path.dirname(__file__), 'asl.task')
 
 # Create a GestureRecognizer object
 asltsRecognizer = vision.GestureRecognizer.create_from_model_path(model_path)
@@ -68,6 +68,19 @@ async def main(page: ft.Page):
     async def updateAudio(asl = ""):
 
         transcribedSpeechPlayer.release()
+
+        data = io.BytesIO()
+
+        # create a gTTS object
+        try: gtts = gTTS(text=asl, lang="en", slow=False)
+        except AssertionError: gtts = gTTS(text="space", lang="en", slow=False)
+
+        gtts.write_to_fp(data)
+
+        data.seek(0)
+
+        speech = base64.b64encode(data.read()).decode('utf-8')
+
         transcribedSpeechPlayer.src_base64 = speech
 
         transcribedSpeechPlayer.update()
