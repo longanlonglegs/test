@@ -12,6 +12,7 @@ from mediapipe.tasks.python import vision
 from mediapipe.tasks import python  
 import asyncio
 import socket  # Import socket for checking internet connection
+import flet_audio as fta
 
 cap = None
 ASLTSstate = False
@@ -61,8 +62,8 @@ async def main(page: ft.Page):
 
         speech = base64.b64encode(data.read()).decode('utf-8')
 
-        transcribedSpeechPlayer = ft.Audio(
-            src_base64= speech
+        transcribedSpeechPlayer = fta.Audio(
+            src_base64=speech
         )
 
     async def updateAudio(asl = ""):
@@ -93,7 +94,7 @@ async def main(page: ft.Page):
 
     def goASLTT(e):
         page.go("/ASLTT")
-        page.overlay.append(transcribedSpeechPlayer)
+        if audioState: page.overlay.append(transcribedSpeechPlayer)
         img_view.src = "icon.png"
 
     #Callback for starting the ASLTS

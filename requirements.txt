@@ -6,3 +6,4 @@ numpy
 gTTS
 flet
 SpeechRecognition
+flet-audio
