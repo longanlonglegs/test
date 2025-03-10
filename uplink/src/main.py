@@ -50,6 +50,9 @@ async def main(page: ft.Page):
         print("No internet connection. Please check your Wi-Fi.")
 
     else: 
+
+        print("wifi")
+
         data = io.BytesIO()
 
         # create a gTTS object
