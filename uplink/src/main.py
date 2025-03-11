@@ -21,8 +21,10 @@ sttRecognizer = sr.Recognizer()
 mic = sr.Microphone()
 audioState = False
 
+aslFilename = 'bright.task'
+
 # Check if the model exists
-model_path = os.path.join(os.path.dirname(__file__), 'asl.task')
+model_path = os.path.join(os.path.dirname(__file__), aslFilename)
 
 # Create a GestureRecognizer object
 asltsRecognizer = vision.GestureRecognizer.create_from_model_path(model_path)
@@ -271,7 +273,7 @@ async def main(page: ft.Page):
 
     sttStopButton = ft.ElevatedButton(content=ft.Text(value="End", size=40), expand=True, on_click=releaseSTT, height=80)
 
-    sttText = ft.Text("Generated text will be displayed here", expand=True, size=40)
+    sttText = ft.Text("Generated text will be displayed here", size=40, height=80)
 
     STTbutton_row = ft.Row(alignment=ft.MainAxisAlignment.SPACE_EVENLY, expand=True, controls=[sttStartButton, sttStopButton])
     STTmain_col = ft.Column(alignment=ft.MainAxisAlignment.START, expand=True, 
